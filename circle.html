@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click the Circle Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #game-area {
+            position: relative;
+            width: 80vw;
+            height: 80vh;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+
+        .circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        #score,
+        #timer {
+            position: absolute;
+            top: 10px;
+            font-size: 1.5rem;
+        }
+
+        #score {
+            left: 10px;
+        }
+
+        #timer {
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-area">
+        <div id="score">Score: 0</div>
+        <div id="timer">Time: 30</div>
+    </div>
+
+    <script>
+        class Circle {
+            constructor(gameArea, onClick) {
+                this.gameArea = gameArea;
+                this.circle = document.createElement('div');
+                this.circle.className = 'circle';
+                this.circle.addEventListener('click', onClick);
+                this.gameArea.appendChild(this.circle);
+            }
+
+            move() {
+                const maxX = this.gameArea.clientWidth - this.circle.offsetWidth;
+                const maxY = this.gameArea.clientHeight - this.circle.offsetHeight;
+                const randomX = Math.floor(Math.random() * maxX);
+                const randomY = Math.floor(Math.random() * maxY);
+                this.circle.style.left = `${randomX}px`;
+                this.circle.style.top = `${randomY}px`;
+            }
+        }
+
+        const gameArea = document.getElementById('game-area');
+
+
+         class Game {
+            constructor(gameArea, scoreElement, timerElement) {
+                this.gameArea = gameArea;
+                this.scoreElement = scoreElement;
+                this.timerElement = timerElement;
+                this.score = 0;
+                this.timeLeft = 30;
+                this.circle = new Circle(gameArea, this.handleCircleClick.bind(this));
+            }
+
+            start() {
+                this.updateTimer();
+                this.circle.move();
+                this.interval = setInterval(() => {
+                    if (this.timeLeft > 0) {
+                        this.circle.move();
+                    } else {
+                        clearInterval(this.interval);
+                        alert(`Game over! Your score is ${this.score}`);
+                    }
+                }, 1000);
+            }
+
+            handleCircleClick() {
+                this.score++;
+                this.scoreElement.textContent = `Score: ${this.score}`;
+                this.circle.move();
+            }
+
+            updateTimer() {
+                this.timerElement.textContent = `Time: ${this.timeLeft}`;
+                if (this.timeLeft > 0) {
+                    this.timeLeft--;
+                    setTimeout(this.updateTimer.bind(this), 1000);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameArea = document.getElementById('game-area');
+            const scoreElement = document.getElementById('score');
+            const timerElement = document.getElementById('timer');
+            const game = new Game(gameArea, scoreElement, timerElement);
+            game.start();
+        });
+    </script>
+
+</body>
+</html>
