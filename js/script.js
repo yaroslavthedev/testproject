@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use strict";
 
 
@@ -64,8 +65,8 @@ let arrObj = {
     }
 };
 
-const b = 'b';
-arrObj['b'] = '12345';
+/* const b = 'b';
+arrObj['b'] = '12345'; */
 
 console.log(arrObj.b);
 
@@ -117,3 +118,25 @@ const isChecked = true,
     isClose = false;
 
 console.log(isChecked && !isClose);
+
+const numberOfFilms = prompt('How many films have you seen already?', '');
+
+const personalMovieDB = {
+    count: numberOfFilms,
+    movies: {},
+    actors: {},
+    genres: [],
+    privat: false
+};
+
+const a = prompt('Last film watched?', '');
+const b = prompt('Your rating?', '');
+
+const c = prompt('Last film watched?', '');
+const d = prompt('Your rating?', '');
+
+personalMovieDB['movies'][a] = b;
+personalMovieDB['movies'][c] = d;
+
+
+console.log(personalMovieDB);
